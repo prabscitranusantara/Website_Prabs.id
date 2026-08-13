@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Prabs — Bali Furniture Sourcing & Export</title>
-<meta name="description" content="Asset-light furniture sourcing and export partner connecting interior designers, hotels, retailers, and distributors to vetted Bali production partners." />
+<title>Prabs — Bali Furniture Sourcing & Export (Preview)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -75,15 +74,6 @@
     text-decoration: none;
   }
 
-  .strip { background: var(--color-secondary); border-bottom: 1px solid var(--color-border); padding: 0.9rem 1.25rem; }
-  .strip-inner {
-    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
-    gap: 0.5rem 1.5rem; font-family: var(--font-data); font-size: 0.72rem;
-    letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-muted); text-align: center;
-  }
-  .strip-inner b { color: var(--color-primary); font-weight: 500; }
-  .strip-divider { opacity: 0.5; }
-
   section { padding: 4rem 1.25rem; }
   .section-label {
     font-family: var(--font-data); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
@@ -97,6 +87,13 @@
   .cat-card h3 { font-family: var(--font-heading); font-weight: 500; font-size: 1.2rem; margin-bottom: 0.5rem; }
   .cat-card p { font-size: 0.88rem; color: var(--color-muted); }
   .cat-link { display: inline-block; margin-top: 1rem; font-size: 0.85rem; font-weight: 600; color: var(--color-primary); text-decoration: none; }
+
+  .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; margin-top: 2rem; }
+  @media (min-width: 640px) { .product-grid { grid-template-columns: repeat(4,1fr); } }
+  .product-card { border: 1px solid var(--color-border); border-radius: 10px; overflow: hidden; background: #fff; }
+  .product-card img { width: 100%; height: 150px; object-fit: cover; background: var(--color-secondary); }
+  .product-card p { font-size: 0.82rem; padding: 0.6rem 0.7rem; color: var(--color-foreground); }
+  .product-empty { font-size: 0.9rem; color: var(--color-muted); margin-top: 1.5rem; }
 
   .why-bali { background: var(--color-secondary); }
   .why-grid { display: grid; gap: 2rem; margin-top: 2rem; }
@@ -138,16 +135,17 @@
     <div class="logo">Prabs</div>
     <div class="nav-links">
       <a href="#collection">Collections</a>
+      <a href="#products">Produk</a>
       <a href="#why-bali">Why Bali</a>
       <a href="#sourcing">Sourcing</a>
       <a href="#contact">Contact</a>
     </div>
-    <a class="nav-cta" href="mailto:prabscitranusantara@gmail.com?subject=Catalog%20Request">Request Catalog</a>
+    <a class="nav-cta" href="#contact">Request Catalog</a>
   </nav>
 </header>
 
 <section class="hero">
-  <svg class="hero-pattern" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <svg class="hero-pattern" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <pattern id="weaveA" width="26" height="26" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
         <line x1="0" y1="0" x2="0" y2="26" stroke="#D8B98A" stroke-width="1" />
@@ -163,17 +161,9 @@
     <span class="eyebrow">Bali Furniture Sourcing</span>
     <h1>Your sourcing partner for premium Bali furniture</h1>
     <p>We connect interior designers, hotels, retailers, and distributors to vetted production partners across Bali — without the risk of sourcing sight unseen.</p>
-    <a class="btn-primary" href="mailto:prabscitranusantara@gmail.com?subject=Catalog%20Request">Request the Catalog</a>
+    <a class="btn-primary" href="#contact">Request the Catalog</a>
   </div>
 </section>
-
-<div class="strip">
-  <div class="strip-inner">
-    <span>Inquiry-based pricing in <b>USD</b></span>
-    <span class="strip-divider">|</span>
-    <span>Shipping to <b>USA</b> · <b>Australia</b> · <b>Europe</b></span>
-  </div>
-</div>
 
 <section id="collection">
   <div class="container">
@@ -183,18 +173,28 @@
       <div class="cat-card">
         <h3>Seating</h3>
         <p>Lounge chairs, dining chairs, and daybeds — rattan, teak, and mixed-material builds.</p>
-        <a class="cat-link" href="mailto:prabscitranusantara@gmail.com?subject=Seating%20Inquiry">Enquire on Seating →</a>
+        <a class="cat-link" href="#">Explore Seating →</a>
       </div>
       <div class="cat-card">
         <h3>Tables</h3>
         <p>Dining, coffee, and outdoor tables in solid teak and teak-rattan combinations.</p>
-        <a class="cat-link" href="mailto:prabscitranusantara@gmail.com?subject=Tables%20Inquiry">Enquire on Tables →</a>
+        <a class="cat-link" href="#">Explore Tables →</a>
       </div>
       <div class="cat-card">
         <h3>Cabinets</h3>
         <p>Storage and display pieces built for hospitality and retail environments.</p>
-        <a class="cat-link" href="mailto:prabscitranusantara@gmail.com?subject=Cabinets%20Inquiry">Enquire on Cabinets →</a>
+        <a class="cat-link" href="#">Explore Cabinets →</a>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="products">
+  <div class="container">
+    <span class="section-label">Produk Kami</span>
+    <h2>Katalog terbaru dari partner produksi kami</h2>
+    <div class="product-grid" id="productGrid">
+      <p class="product-empty">Memuat produk...</p>
     </div>
   </div>
 </section>
@@ -207,9 +207,9 @@
       <p class="lede">Prabs works with an established network of Bali production partners instead of running its own factory — artisan-level craftsmanship with the flexibility of a trading partner: faster sourcing, no idle-capacity risk, and inspection on every order before it ships.</p>
     </div>
     <div class="stat-list">
-      <div class="stat-item"><strong>173 products</strong><span>Seating, tables & cabinets from 3 vetted partners</span></div>
+      <div class="stat-item"><strong>3 vetted partners</strong><span>Rattan, teak, and mixed-material specialists</span></div>
       <div class="stat-item"><strong>Asset-light model</strong><span>No factory overhead priced into your order</span></div>
-      <div class="stat-item"><strong>QC on every order</strong><span>Inspected in Bali before it ships</span></div>
+      <div class="stat-item"><strong>QC on every order</strong><span>Inspected before it leaves Bali</span></div>
     </div>
   </div>
 </section>
@@ -233,15 +233,46 @@
     <h2>Ready to source from Bali?</h2>
     <p>Send your brief and we'll come back with vetted options and a quote.</p>
     <div class="cta-links">
-      <a class="btn-primary" href="mailto:prabscitranusantara@gmail.com?subject=Sourcing%20Inquiry">Email Us</a>
+      <a class="btn-primary" href="mailto:prabscitranusantara@gmail.com">Email Us</a>
       <a class="btn-secondary" href="https://instagram.com/prabs.id" target="_blank" rel="noopener">Instagram</a>
     </div>
   </div>
 </section>
 
 <footer>
-  © 2026 Prabs — Bali furniture sourcing & export.
+  © 2026 Prabs — Bali furniture sourcing & export. Preview only — draft copy, not the final site.
 </footer>
 
+<script>
+  async function loadPublicProducts() {
+    const grid = document.getElementById('productGrid');
+    try {
+      const res = await fetch('/api/products');
+      const data = await res.json();
+      const products = data.products || [];
+      if (products.length === 0) {
+        grid.innerHTML = '<p class="product-empty">Katalog sedang disiapkan — hubungi kami untuk request katalog lengkap.</p>';
+        return;
+      }
+      grid.innerHTML = '';
+      for (const p of products) {
+        const div = document.createElement('div');
+        div.className = 'product-card fade-in';
+        const caption = document.createElement('p');
+        caption.textContent = p.caption || '';
+        const img = document.createElement('img');
+        img.src = '/api/image?id=' + encodeURIComponent(p.id);
+        img.alt = p.caption || 'Produk Prabs';
+        img.loading = 'lazy';
+        div.appendChild(img);
+        div.appendChild(caption);
+        grid.appendChild(div);
+      }
+    } catch {
+      grid.innerHTML = '<p class="product-empty">Katalog sedang disiapkan — hubungi kami untuk request katalog lengkap.</p>';
+    }
+  }
+  loadPublicProducts();
+</script>
 </body>
 </html>

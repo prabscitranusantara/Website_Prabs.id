@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Admin — Prabs Produk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-background: #FBFAF7;
+    --color-foreground: #231A13;
+    --color-primary: #33261C;
+    --color-secondary: #EDE7DA;
+    --color-accent: #8C6A3F;
+    --color-muted: #756A5A;
+    --color-border: #DDD4C4;
+    --font-heading: "Fraunces", serif;
+    --font-body: "Public Sans", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--color-background); color: var(--color-foreground);
+    font-family: var(--font-body); line-height: 1.5; padding: 1.5rem 1.25rem 4rem;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; }
+  h1 { font-family: var(--font-heading); font-weight: 600; font-size: 1.6rem; margin-bottom: 0.3rem; }
+  .sub { color: var(--color-muted); font-size: 0.9rem; margin-bottom: 2rem; }
+
+  .card {
+    background: #fff; border: 1px solid var(--color-border); border-radius: 10px;
+    padding: 1.5rem; margin-bottom: 1.5rem;
+  }
+  label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; margin-top: 1rem; }
+  label:first-child { margin-top: 0; }
+  input[type="password"], input[type="text"] {
+    width: 100%; padding: 0.65rem 0.8rem; border: 1px solid var(--color-border);
+    border-radius: 6px; font-size: 0.95rem; font-family: inherit;
+  }
+
+  .dropzone {
+    margin-top: 0.4rem; border: 2px dashed var(--color-border); border-radius: 8px;
+    padding: 2rem 1rem; text-align: center; cursor: pointer; transition: border-color 0.15s, background 0.15s;
+  }
+  .dropzone.dragover { border-color: var(--color-accent); background: var(--color-secondary); }
+  .dropzone p { font-size: 0.88rem; color: var(--color-muted); }
+  .dropzone input { display: none; }
+  #preview { margin-top: 1rem; max-width: 100%; max-height: 220px; border-radius: 8px; display: none; }
+
+  button {
+    margin-top: 1.5rem; width: 100%; background: var(--color-primary); color: var(--color-background);
+    border: none; padding: 0.85rem; border-radius: 6px; font-size: 0.95rem; font-weight: 600;
+    font-family: inherit; cursor: pointer;
+  }
+  button:disabled { opacity: 0.6; cursor: not-allowed; }
+  .msg { margin-top: 1rem; font-size: 0.88rem; padding: 0.7rem 0.9rem; border-radius: 6px; display: none; }
+  .msg.ok { display: block; background: #E4EFE4; color: #2A5C2A; }
+  .msg.err { display: block; background: #F6E3E0; color: #8C3A2E; }
+
+  .products { display: grid; grid-template-columns: 1fr; gap: 0.9rem; margin-top: 1rem; }
+  @media (min-width: 480px) { .products { grid-template-columns: 1fr 1fr; } }
+  .product { border: 1px solid var(--color-border); border-radius: 8px; overflow: hidden; background: #fff; }
+  .product img { width: 100%; height: 140px; object-fit: cover; display: block; background: var(--color-secondary); }
+  .product-body { padding: 0.6rem 0.75rem; }
+  .product-body p { font-size: 0.85rem; margin-bottom: 0.5rem; }
+  .del-btn {
+    margin: 0; width: auto; background: transparent; color: #8C3A2E; border: 1px solid #E0B8B0;
+    padding: 0.35rem 0.7rem; font-size: 0.78rem; font-weight: 600; border-radius: 5px;
+  }
+  .empty { font-size: 0.85rem; color: var(--color-muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Admin Produk</h1>
+  <p class="sub">Upload foto produk + caption. Halaman ini tidak muncul di mesin pencari.</p>
+
+  <div class="card">
+    <label for="password">Password Admin</label>
+    <input type="password" id="password" autocomplete="off" placeholder="Masukkan password" />
+
+    <label>Foto Produk</label>
+    <div class="dropzone" id="dropzone">
+      <p id="dropzone-text">Tarik & taruh gambar di sini, atau klik untuk pilih file<br>(JPEG/PNG/WEBP/GIF, maks 5MB)</p>
+      <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif" />
+    </div>
+    <img id="preview" alt="Preview" />
+
+    <label for="caption">Caption</label>
+    <input type="text" id="caption" placeholder="Contoh: Kursi rotan Bali, seri Ubud" maxlength="200" />
+
+    <button id="uploadBtn">Upload Produk</button>
+    <div class="msg" id="msg"></div>
+  </div>
+
+  <div class="card">
+    <h2 style="font-family:var(--font-heading);font-weight:600;font-size:1.1rem;margin-bottom:0.75rem;">Produk Tersimpan</h2>
+    <div class="products" id="productList"></div>
+  </div>
+</div>
+
+<script>
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('fileInput');
+  const preview = document.getElementById('preview');
+  const dropzoneText = document.getElementById('dropzone-text');
+  const uploadBtn = document.getElementById('uploadBtn');
+  const msg = document.getElementById('msg');
+  const passwordInput = document.getElementById('password');
+  const captionInput = document.getElementById('caption');
+  const productList = document.getElementById('productList');
+
+  let selectedFile = null;
+
+  dropzone.addEventListener('click', () => fileInput.click());
+  dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
+  dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+  dropzone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropzone.classList.remove('dragover');
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFile(e.dataTransfer.files[0]);
+    }
+  });
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) handleFile(fileInput.files[0]);
+  });
+
+  function handleFile(file) {
+    selectedFile = file;
+    dropzoneText.textContent = file.name;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function showMsg(text, ok) {
+    msg.textContent = text;
+    msg.className = 'msg ' + (ok ? 'ok' : 'err');
+  }
+
+  uploadBtn.addEventListener('click', async () => {
+    msg.className = 'msg';
+    if (!passwordInput.value) return showMsg('Password wajib diisi.', false);
+    if (!selectedFile) return showMsg('Pilih file gambar dulu.', false);
+
+    uploadBtn.disabled = true;
+    uploadBtn.textContent = 'Mengupload...';
+
+    const formData = new FormData();
+    formData.append('password', passwordInput.value);
+    formData.append('caption', captionInput.value);
+    formData.append('file', selectedFile);
+
+    try {
+      const res = await fetch('/api/admin/upload', { method: 'POST', body: formData });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Upload gagal.');
+      showMsg('Berhasil diupload!', true);
+      selectedFile = null;
+      fileInput.value = '';
+      preview.style.display = 'none';
+      dropzoneText.textContent = 'Tarik & taruh gambar di sini, atau klik untuk pilih file (JPEG/PNG/WEBP/GIF, maks 5MB)';
+      captionInput.value = '';
+      loadProducts();
+    } catch (err) {
+      showMsg(err.message, false);
+    } finally {
+      uploadBtn.disabled = false;
+      uploadBtn.textContent = 'Upload Produk';
+    }
+  });
+
+  async function loadProducts() {
+    productList.innerHTML = '<p class="empty">Memuat...</p>';
+    try {
+      const res = await fetch('/api/products');
+      const data = await res.json();
+      const products = data.products || [];
+      if (products.length === 0) {
+        productList.innerHTML = '<p class="empty">Belum ada produk.</p>';
+        return;
+      }
+      productList.innerHTML = '';
+      for (const p of products) {
+        const div = document.createElement('div');
+        div.className = 'product';
+        div.innerHTML = `
+          <img src="/api/image?id=${encodeURIComponent(p.id)}" alt="${escapeHtml(p.caption || '')}" loading="lazy" />
+          <div class="product-body">
+            <p>${escapeHtml(p.caption || '(tanpa caption)')}</p>
+            <button class="del-btn" data-id="${p.id}">Hapus</button>
+          </div>`;
+        productList.appendChild(div);
+      }
+      productList.querySelectorAll('.del-btn').forEach((btn) => {
+        btn.addEventListener('click', () => deleteProduct(btn.dataset.id));
+      });
+    } catch {
+      productList.innerHTML = '<p class="empty">Gagal memuat produk.</p>';
+    }
+  }
+
+  async function deleteProduct(id) {
+    if (!passwordInput.value) return showMsg('Masukkan password dulu buat hapus.', false);
+    if (!confirm('Hapus produk ini?')) return;
+    try {
+      const res = await fetch('/api/admin/delete', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ password: passwordInput.value, id }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Gagal hapus.');
+      loadProducts();
+    } catch (err) {
+      showMsg(err.message, false);
+    }
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  loadProducts();
+</script>
+</body>
+</html>
